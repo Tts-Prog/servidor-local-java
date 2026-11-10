@@ -3,13 +3,18 @@ package core;
 import model.Servico;
 import model.Pessoa;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 
 public class Main {
     public static void main(String[] args) {
 
-        Pessoa pessoa1 = new Pessoa("Tiago", "assomada", 10, 2000.0);
+        /*Pessoa pessoa1 = new Pessoa("Tiago", "assomada", 10, 2000.0);
         Pessoa pessoa2 = new Pessoa("Elvis", "assomada", 10, 21000.0);
 
         System.out.println("/-----------------Pessoa 1----------------------/");
@@ -47,7 +52,25 @@ public class Main {
 
         servico1.verificarDisponibilidade();
 
-        double saldoAtual = pessoa1.getSaldo();
+        double saldoAtual = pessoa1.getSaldo();*/
+
+
+        try {
+            HttpClient cliente = HttpClient.newHttpClient();
+
+            HttpRequest pedido = HttpRequest.newBuilder()
+                    .uri(URI.create("https://dummyjson.com/products/1"))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> resposta = cliente.send(pedido, HttpResponse.BodyHandlers.ofString());
+
+            System.out.println("Codigo de resposta: " + resposta.statusCode());
+            System.out.println("Dados de resposta: " + resposta.body());
+
+        } catch(Exception e) {
+            System.out.println("Erro ao chamar api: " + e.getMessage());
+        }
 
     }
 }
